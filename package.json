@@ -1,0 +1,28 @@
+{
+  "name": "dahlia_scraper_ts",
+  "version": "1.0.0",
+  "description": "Dahlia scraper",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "/lib"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "start": "tsc && node lib/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "npm run build"
+  },
+  "engines": {
+    "node": "18"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.16.6",
+    "typescript": "^5.4.2"
+  },
+  "dependencies": {
+    "node-fetch": "^3.3.2"
+  }
+}
