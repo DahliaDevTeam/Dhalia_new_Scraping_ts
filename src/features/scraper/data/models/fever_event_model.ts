@@ -23,14 +23,14 @@ export interface IFeverEventModel {
 }
 
 function cleanDescription(rawDescription: string, maxLength: number): string {
-    // Supprime les balises HTML, les émojis, et les caractères spéciaux
     let cleanText = rawDescription
-        .replace(/<\/?[^>]+(>|$)/g, "")  // Enlève les balises HTML
-        .replace(/&[a-z]+;/g, " ")       // Supprime les entités HTML (comme &nbsp;)
-        .replace(/🎬|📅|🎥|⭐|🎭|⏳|👤|🎁|🔍/g, "") // Enlève les émojis spécifiques
-        .replace(/\s+/g, " ")            // Supprime les espaces multiples
+        .replace(/<\/?[^>]+(>|$)/g, "")
+        .replace(/&[a-z]+;/g, " ")
+        .replace(/[🎬📅🎥⭐🎭⏳👤🎁🔍🎫🎻🎤🍽️🎉📨🔑📱]/g, "")
+        .replace(/\s+/g, " ")
+        .trim();
 
-    // Tronque la chaîne si elle dépasse la longueur maximale
+    // Tronque le texte à la longueur maximale, si nécessaire, et ajoute "..."
     return cleanText.length > maxLength ? cleanText.substring(0, maxLength) + '...' : cleanText;
 }
 
