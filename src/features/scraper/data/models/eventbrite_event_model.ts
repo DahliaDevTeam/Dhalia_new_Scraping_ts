@@ -21,17 +21,25 @@ export interface IEventbriteEventModel {
     readonly isOnline: boolean;
     readonly availableTickets: number;
 }
-function cleanDescription(rawDescription: string, maxLength: number): string {
-    let cleanText = rawDescription
-        .replace(/<\/?[^>]+(>|$)/g, "")
-        .replace(/&[a-z]+;/g, " ")
-        .replace(/[🎬📅🎥⭐🎭⏳👤🎁🔍🎫🎻🎤🍽️🎉📨🔑📱]/g, "")
-        .replace(/\s+/g, " ")
-        .trim();
 
-    // Tronque le texte à la longueur maximale, si nécessaire, et ajoute "..."
-    return cleanText.length > maxLength ? cleanText.substring(0, maxLength) + '...' : cleanText;
+export function cleanDescription(rawDescription: string, maxLength: number): string {
+    // Suppression des balises HTML
+    let cleanedText = rawDescription.replace(/<[^>]*>/g, '');
+
+    // Suppression des emojis et symboles non désirés
+    cleanedText = cleanedText.replace(/[\u{1F600}-\u{1F6FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F900}-\u{1F9FF}]/gu, '');
+
+    // Retirer les espaces inutiles et les caractères de nouvelle ligne
+    cleanedText = cleanedText.replace(/\s\s+/g, ' ').trim();
+
+    // Tronquer à la longueur maximale spécifiée
+    if (cleanedText.length > maxLength) {
+        cleanedText = cleanedText.slice(0, maxLength) + '...';
+    }
+
+    return cleanedText;
 }
+
 
 export class EventbriteEventModel extends EventModel {
     constructor(event: IEventbriteEventModel) {
@@ -55,7 +63,7 @@ export class EventbriteEventModel extends EventModel {
             name: utf8Encode(json.name ?? ''),
             startDate,
             endDate,
-            description: cleanDescription(json.summary ?? '', 250),
+            description: cleanDescription(json.summary as string | undefined ?? '', 400),
             image: json.image.url ?? '',
             organizer: {
                 uid: json.primary_organizer.id,

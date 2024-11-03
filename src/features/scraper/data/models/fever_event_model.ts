@@ -22,16 +22,22 @@ export interface IFeverEventModel {
 
 }
 
-function cleanDescription(rawDescription: string, maxLength: number): string {
-    let cleanText = rawDescription
-        .replace(/<\/?[^>]+(>|$)/g, "")
-        .replace(/&[a-z]+;/g, " ")
-        .replace(/[🎬📅🎥⭐🎭⏳👤🎁🔍🎫🎻🎤🍽️🎉📨🔑📱]/g, "")
-        .replace(/\s+/g, " ")
-        .trim();
+export function cleanDescription(rawDescription: string, maxLength: number): string {
+    // Suppression des balises HTML
+    let cleanedText = rawDescription.replace(/<[^>]*>/g, '');
 
-    // Tronque le texte à la longueur maximale, si nécessaire, et ajoute "..."
-    return cleanText.length > maxLength ? cleanText.substring(0, maxLength) + '...' : cleanText;
+    // Suppression des emojis et symboles non désirés
+    cleanedText = cleanedText.replace(/[\u{1F600}-\u{1F6FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F900}-\u{1F9FF}]/gu, '');
+
+    // Retirer les espaces inutiles et les caractères de nouvelle ligne
+    cleanedText = cleanedText.replace(/\s\s+/g, ' ').trim();
+
+    // Tronquer à la longueur maximale spécifiée
+    if (cleanedText.length > maxLength) {
+        cleanedText = cleanedText.slice(0, maxLength) + '...';
+    }
+
+    return cleanedText;
 }
 
 export class FeverEventModel extends EventModel {
@@ -57,7 +63,7 @@ export class FeverEventModel extends EventModel {
             endDate: json.default_session && json.default_session.ends_at_iso 
                 ? new Date(Date.parse(json.default_session.ends_at_iso)) 
                 : new Date(),
-            description: cleanDescription(json.description ?? '', 250)  || '',  // Utilisez une valeur par défaut si la description est manquante
+            description: cleanDescription(json.summary as string | undefined ?? '', 400),
             image: json.cover_image || '',
             organizer: {
                 uid: json.partner && json.partner.id ? json.partner.id.toString() : '',
