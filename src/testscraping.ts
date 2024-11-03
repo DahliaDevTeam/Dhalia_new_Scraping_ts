@@ -31,6 +31,6 @@ async function testAllScraping() {
     }
 }
 
-// testScrapingFever();
-testScrapeEventbrite();
+testScrapingFever();
+// testScrapeEventbrite();
 // testAllScraping();

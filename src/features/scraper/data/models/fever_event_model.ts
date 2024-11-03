@@ -63,7 +63,7 @@ export class FeverEventModel extends EventModel {
             endDate: json.default_session && json.default_session.ends_at_iso 
                 ? new Date(Date.parse(json.default_session.ends_at_iso)) 
                 : new Date(),
-            description: cleanDescription(json.summary as string | undefined ?? '', 400),
+            description: cleanDescription(json.description as string | undefined ?? '', 400),
             image: json.cover_image || '',
             organizer: {
                 uid: json.partner && json.partner.id ? json.partner.id.toString() : '',
