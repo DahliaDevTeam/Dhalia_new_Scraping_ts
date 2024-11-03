@@ -23,13 +23,12 @@ export interface IEventbriteEventModel {
 }
 
 function cleanDescription(rawDescription: string, maxLength: number): string {
-    // Supprime les balises HTML, caractères de contrôle et espaces supplémentaires
+    // Supprime les balises HTML, les émojis, et les caractères spéciaux
     let cleanText = rawDescription
         .replace(/<\/?[^>]+(>|$)/g, "")  // Enlève les balises HTML
-        .replace(/[\r\n]+/g, " ")        // Remplace les retours à la ligne par un espace
-        .replace(/&nbsp;/g, " ")         // Remplace &nbsp; par un espace
+        .replace(/&[a-z]+;/g, " ")       // Supprime les entités HTML (comme &nbsp;)
+        .replace(/🎬|📅|🎥|⭐|🎭|⏳|👤|🎁|🔍/g, "") // Enlève les émojis spécifiques
         .replace(/\s+/g, " ")            // Supprime les espaces multiples
-        .replace(/[^\w\s.,!?':;()&-]/g, "");  // Enlève les émojis et caractères spéciaux
 
     // Tronque la chaîne si elle dépasse la longueur maximale
     return cleanText.length > maxLength ? cleanText.substring(0, maxLength) + '...' : cleanText;
