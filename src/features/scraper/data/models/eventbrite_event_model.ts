@@ -22,6 +22,19 @@ export interface IEventbriteEventModel {
     readonly availableTickets: number;
 }
 
+function cleanDescription(rawDescription: string, maxLength: number): string {
+    // Supprime les balises HTML, caractères de contrôle et espaces supplémentaires
+    let cleanText = rawDescription
+        .replace(/<\/?[^>]+(>|$)/g, "")  // Enlève les balises HTML
+        .replace(/[\r\n]+/g, " ")        // Remplace les retours à la ligne par un espace
+        .replace(/&nbsp;/g, " ")         // Remplace &nbsp; par un espace
+        .replace(/\s+/g, " ")            // Supprime les espaces multiples
+        .replace(/[^\w\s.,!?':;()&-]/g, "");  // Enlève les émojis et caractères spéciaux
+
+    // Tronque la chaîne si elle dépasse la longueur maximale
+    return cleanText.length > maxLength ? cleanText.substring(0, maxLength) + '...' : cleanText;
+}
+
 export class EventbriteEventModel extends EventModel {
     constructor(event: IEventbriteEventModel) {
         super({
@@ -29,6 +42,8 @@ export class EventbriteEventModel extends EventModel {
             source: ScrapedSite.eventbrite,
         });
     }
+
+    
 
     static fromJson(json: any): EventbriteEventModel {
         const startDate = new Date(`${json.start_date} ${json.start_time}`);
@@ -42,7 +57,7 @@ export class EventbriteEventModel extends EventModel {
             name: utf8Encode(json.name ?? ''),
             startDate,
             endDate,
-            description: utf8Encode(json.summary ?? ''),
+            description: cleanDescription(json.summary ?? '', 1000),
             image: json.image.url ?? '',
             organizer: {
                 uid: json.primary_organizer.id,
