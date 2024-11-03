@@ -26,16 +26,16 @@ export interface IFeverEventModel {
 
 
 export function cleanDescription(rawDescription: string, maxLength: number): string {
-    // Décoder les entités HTML en texte brut
+    // Décoder les entités HTML
     let cleanedText = he.decode(rawDescription);
 
-    // Supprimer les balises HTML
+    // Supprimer les balises HTML, y compris les images et les liens avec contenu intégré
     cleanedText = cleanedText.replace(/<[^>]*>/g, '');
 
     // Supprimer les emojis et symboles non désirés
     cleanedText = cleanedText.replace(/[\u{1F600}-\u{1F6FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F900}-\u{1F9FF}]/gu, '');
 
-    // Retirer les espaces inutiles et les caractères de nouvelle ligne
+    // Remplacer les nouvelles lignes multiples par un seul espace pour éviter trop d'espaces vides
     cleanedText = cleanedText.replace(/\s\s+/g, ' ').trim();
 
     // Tronquer à la longueur maximale spécifiée
@@ -45,7 +45,6 @@ export function cleanDescription(rawDescription: string, maxLength: number): str
 
     return cleanedText;
 }
-
 
 export class FeverEventModel extends EventModel {
 
