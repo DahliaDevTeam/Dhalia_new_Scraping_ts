@@ -4,6 +4,7 @@ import { Price } from "../../../../core/business_objects/price";
 import { utf8Encode } from "../../../../core/utils/utf8_encode";
 import { ScrapedSite } from "../../domain/enums/scraped_sites_enum";
 import { EventModel } from "./event_model";
+import * as he from 'he';
 
 export interface IFeverEventModel {
     
@@ -22,11 +23,16 @@ export interface IFeverEventModel {
 
 }
 
-export function cleanDescription(rawDescription: string, maxLength: number): string {
-    // Suppression des balises HTML
-    let cleanedText = rawDescription.replace(/<[^>]*>/g, '');
 
-    // Suppression des emojis et symboles non désirés
+
+export function cleanDescription(rawDescription: string, maxLength: number): string {
+    // Décoder les entités HTML en texte brut
+    let cleanedText = he.decode(rawDescription);
+
+    // Supprimer les balises HTML
+    cleanedText = cleanedText.replace(/<[^>]*>/g, '');
+
+    // Supprimer les emojis et symboles non désirés
     cleanedText = cleanedText.replace(/[\u{1F600}-\u{1F6FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F900}-\u{1F9FF}]/gu, '');
 
     // Retirer les espaces inutiles et les caractères de nouvelle ligne
@@ -39,6 +45,7 @@ export function cleanDescription(rawDescription: string, maxLength: number): str
 
     return cleanedText;
 }
+
 
 export class FeverEventModel extends EventModel {
 
@@ -53,7 +60,7 @@ export class FeverEventModel extends EventModel {
 
    
 
-    static fromJson(json: any): FeverEventModel {
+    static  async fromJson(json: any): Promise<FeverEventModel> {
         return new FeverEventModel({
             id: typeof json.id === 'string' ? parseInt(json.id) : json.id,
             name: json.name ? utf8Encode(json.name) : '',  // Vérifiez si json.name est défini
@@ -63,7 +70,7 @@ export class FeverEventModel extends EventModel {
             endDate: json.default_session && json.default_session.ends_at_iso 
                 ? new Date(Date.parse(json.default_session.ends_at_iso)) 
                 : new Date(),
-            description: cleanDescription(json.description as string | undefined ?? '', 400),
+            description:  cleanDescription(json.description as string | undefined ?? '', 400),
             image: json.cover_image || '',
             organizer: {
                 uid: json.partner && json.partner.id ? json.partner.id.toString() : '',
