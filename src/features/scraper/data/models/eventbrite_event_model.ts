@@ -55,7 +55,7 @@ export class EventbriteEventModel extends EventModel {
             name: utf8Encode(json.name ?? ''),
             startDate,
             endDate,
-            description: cleanDescription(json.summary ?? '', 1000),
+            description: cleanDescription(json.summary ?? '', 250),
             image: json.image.url ?? '',
             organizer: {
                 uid: json.primary_organizer.id,
