@@ -75,7 +75,7 @@ export class FeverEventModel extends EventModel {
                 events: 0
             },
             price: {
-                value: json.price_info ? json.price_info.amount : 0, // Vérifiez si price_info existe
+                value: json.price_info ? Math.round(parseFloat(json.price_info.amount)) : 0, // Vérifiez si price_info existe
                 currency: json.price_info ? json.price_info.currency : 'EUR'
             },
             tags: [
