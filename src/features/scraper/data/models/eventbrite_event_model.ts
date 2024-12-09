@@ -72,7 +72,7 @@ export class EventbriteEventModel extends EventModel {
                 events: 0,
             },
             price: {
-                value: json.ticket_availability?.minimum_ticket_price?.value ?? 0,
+                value: json.ticket_availability?.minimum_ticket_price?.major_value ?? 0,
                 currency: json.ticket_availability?.minimum_ticket_price?.currency ?? '',
             },
             tags: (json.tags ?? []).map(tag => utf8Encode(tag.display_name ?? '')),

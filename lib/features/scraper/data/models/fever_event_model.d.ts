@@ -16,7 +16,8 @@ export interface IFeverEventModel {
     readonly url: string;
     readonly availableTickets: number;
 }
+export declare function cleanDescription(rawDescription: string, maxLength: number): string;
 export declare class FeverEventModel extends EventModel {
     constructor(event: IFeverEventModel);
-    static fromJson(json: any): FeverEventModel;
+    static fromJson(json: any): Promise<FeverEventModel>;
 }

@@ -18,6 +18,7 @@ export interface IEventbriteEventModel {
     readonly isOnline: boolean;
     readonly availableTickets: number;
 }
+export declare function cleanDescription(rawDescription: string, maxLength: number): string;
 export declare class EventbriteEventModel extends EventModel {
     constructor(event: IEventbriteEventModel);
     static fromJson(json: any): EventbriteEventModel;
