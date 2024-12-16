@@ -12,6 +12,7 @@ export interface IFeverEventModel {
     readonly organizer: EventOrganizer;
     readonly price?: Price;
     readonly tags: string[];
+    readonly categories: string[];
     readonly location: Location;
     readonly url: string;
     readonly availableTickets: number;

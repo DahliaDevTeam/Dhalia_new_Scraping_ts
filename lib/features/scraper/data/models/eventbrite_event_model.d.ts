@@ -12,6 +12,7 @@ export interface IEventbriteEventModel {
     readonly organizer: EventOrganizer;
     readonly price?: Price;
     readonly tags: string[];
+    readonly categories: string[];
     readonly location: Location;
     readonly isFree: boolean;
     readonly url: string;
