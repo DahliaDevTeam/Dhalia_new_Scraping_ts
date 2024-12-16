@@ -32,5 +32,5 @@ async function testAllScraping() {
 }
 
 // testScrapingFever();
-// testScrapeEventbrite();
-testAllScraping();
+testScrapeEventbrite();
+// testAllScraping();

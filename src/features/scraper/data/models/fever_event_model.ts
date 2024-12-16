@@ -17,6 +17,7 @@ export interface IFeverEventModel {
     readonly organizer: EventOrganizer;
     readonly price?: Price;
     readonly tags: string[];
+    readonly categories: string[];
     readonly location: Location;
     readonly url: string;
     readonly availableTickets: number;
@@ -57,6 +58,7 @@ export class FeverEventModel extends EventModel {
    
 
     static  async fromJson(json: any): Promise<FeverEventModel> {
+
         return new FeverEventModel({
             id: typeof json.id === 'string' ? parseInt(json.id) : json.id,
             name: json.name ? utf8Encode(json.name) : '',  // Vérifiez si json.name est défini
@@ -79,6 +81,9 @@ export class FeverEventModel extends EventModel {
                 currency: json.price_info ? json.price_info.currency : 'EUR'
             },
             tags: [
+                json.category || ''
+            ],
+            categories: [
                 json.category || ''
             ],
             location: {

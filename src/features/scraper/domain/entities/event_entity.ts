@@ -15,6 +15,7 @@ export interface IEventEntity {
     readonly organizer: EventOrganizer;
     readonly price?: Price;
     readonly tags: string[];
+    readonly categories: string[];
     readonly location: Location;
     readonly isFree: boolean;
     readonly url: string;
@@ -36,6 +37,7 @@ export abstract class EventEntity implements IEventEntity {
     readonly organizer: EventOrganizer;
     readonly price?: Price;
     readonly tags: string[];
+    readonly categories: string[];
     readonly location: Location;
     readonly isFree: boolean;
     readonly url: string;
@@ -53,6 +55,7 @@ export abstract class EventEntity implements IEventEntity {
         this.organizer = result.organizer;
         this.price = result.price;
         this.tags = result.tags;
+        this.categories = result.tags;
         this.location = result.location;
         this.isFree = result.isFree;
         this.url = result.url;

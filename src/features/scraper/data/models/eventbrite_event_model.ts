@@ -15,6 +15,7 @@ export interface IEventbriteEventModel {
     readonly organizer: EventOrganizer;
     readonly price?: Price;
     readonly tags: string[];
+    readonly categories: string[];
     readonly location: Location;
     readonly isFree: boolean;
     readonly url: string;
@@ -76,6 +77,7 @@ export class EventbriteEventModel extends EventModel {
                 currency: json.ticket_availability?.minimum_ticket_price?.currency ?? '',
             },
             tags: (json.tags ?? []).map(tag => utf8Encode(tag.display_name ?? '')),
+            categories: (json.tags ?? []).map(tag => utf8Encode(tag.display_name ?? '')),
             location: {
                 name: utf8Encode(json.primary_venue.name ?? ''),
                 address: {
